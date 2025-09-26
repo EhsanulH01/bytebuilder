@@ -408,11 +408,7 @@ const openComponentSearch = (category, container) => {
   const componentsHtml = CATALOG[category]
     .map(
       (item) => `
-<<<<<<< HEAD
-    <div class="component-option" onclick="selectComponent('${category}', '${item.id}', this)">
-=======
     <div class="component-option" onclick="selectComponent('${category}', '${item.id}')">
->>>>>>> 5b8c9aa (updated code)
       <img src="${item.image}" alt="${item.name}" class="component-image" />
       <div class="component-info">
         <h4>${item.name}</h4>

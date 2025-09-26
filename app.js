@@ -1,8 +1,5 @@
 // --- Demo data (no external requests) ---
-<<<<<<< HEAD
-=======
 
->>>>>>> 5b8c9aa (updated code)
 const CATALOG = {
   CPU: [
     {
@@ -116,18 +113,6 @@ const state = {};
 
 // --- Page routing (two-page feel) ---
 const showBuilder = () => {
-<<<<<<< HEAD
-  $("#intro").style.display = "none";
-  $("#parts-showcase").style.display = "none";
-  $("#builder").style.display = "block";
-  window.scrollTo({ top: 0, behavior: "smooth" });
-};
-const showIntro = () => {
-  $("#builder").style.display = "none";
-  $("#intro").style.display = "block";
-  $("#parts-showcase").style.display = "block";
-  window.scrollTo({ top: 0, behavior: "smooth" });
-=======
   const intro = $("#intro");
   const partsShowcase = $("#parts-showcase");
   const builder = $("#builder");
@@ -141,16 +126,15 @@ const showIntro = () => {
   const intro = $("#intro");
   const partsShowcase = $("#parts-showcase");
   if (builder) builder.style.display = "none";
-const buildTable = () => {
-  const tbody = $("#rows");
-  if (!tbody) return;
-  tbody.innerHTML = "";
->>>>>>> 5b8c9aa (updated code)
+  if (intro) intro.style.display = "block";
+  if (partsShowcase) partsShowcase.style.display = "block";
+  window.scrollTo({ top: 0, behavior: "smooth" });
 };
 
 // --- Build the component selection table ---
 const buildTable = () => {
   const tbody = $("#rows");
+  if (!tbody) return;
   tbody.innerHTML = "";
 
   ORDER.forEach((category) => {
@@ -207,7 +191,6 @@ const buildTable = () => {
     tdPrice.style.fontWeight = "600";
 
     row.appendChild(tdComponent);
-<<<<<<< HEAD
     row.appendChild(tdSelection);
     row.appendChild(tdPrice);
     tbody.appendChild(row);
@@ -215,8 +198,6 @@ const buildTable = () => {
 };
 
 // --- Update summary and calculations ---
-=======
->>>>>>> 5b8c9aa (updated code)
 const updateSummary = () => {
   let total = 0;
   let totalWatts = 0;
@@ -228,34 +209,18 @@ const updateSummary = () => {
       const item = state[category];
       total += item.price;
       totalWatts += item.watts || 0;
-<<<<<<< HEAD
-      priceCell.textContent = `$${item.price}`;
-=======
       if (priceCell) priceCell.textContent = `$${item.price}`;
->>>>>>> 5b8c9aa (updated code)
 
       // Calculate performance score for CPU + GPU
       if (category === "CPU" || category === "GPU") {
         cpuGpuScore += item.score || 0;
       }
     } else {
-<<<<<<< HEAD
-      priceCell.textContent = "$0";
-=======
       if (priceCell) priceCell.textContent = "$0";
->>>>>>> 5b8c9aa (updated code)
     }
   });
 
   // Update UI elements
-<<<<<<< HEAD
-  $("#totalPrice").textContent = `$${total}`;
-  $("#wattBadge").textContent = `~ Wattage: ${totalWatts}W`;
-  $("#perfScore").textContent = cpuGpuScore > 0 ? `${cpuGpuScore}/200` : "—";
-
-  // Calculate PSU headroom
-  const psu = state["Power Supply"];
-=======
   const totalPriceEl = $("#totalPrice");
   if (totalPriceEl) totalPriceEl.textContent = `$${total}`;
   const wattBadgeEl = $("#wattBadge");
@@ -273,14 +238,6 @@ const updateSummary = () => {
     } else {
       psuHeadroomEl.textContent = "—";
     }
-  }
-};
->>>>>>> 5b8c9aa (updated code)
-  if (psu && totalWatts > 0) {
-    const headroom = (((psu.watts - totalWatts) / psu.watts) * 100).toFixed(0);
-    $("#psuHeadroom").textContent = `${headroom}%`;
-  } else {
-    $("#psuHeadroom").textContent = "—";
   }
 };
 

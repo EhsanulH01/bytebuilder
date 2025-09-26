@@ -359,11 +359,6 @@ select option:hover {
 
 .parts-grid {
   display: grid;
-<<<<<<< HEAD
-  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-  gap: 24px;
-  margin-bottom: 48px;
-=======
   grid-template-columns: repeat(3, 1fr); /* 3 cards per row */
   gap: 24px;
   margin: 0 auto;
@@ -380,7 +375,6 @@ select option:hover {
   .parts-grid {
     grid-template-columns: 1fr; /* 1 card per row on mobile */
   }
->>>>>>> 5b8c9aa (updated code)
 }
 
 .part-card {
