@@ -12,23 +12,16 @@
         <div class="brand">
           <div class="logo" aria-hidden="true"></div>
           <div>
-<<<<<<< HEAD
             <div>Random name</div>
             <div class="pill">Clean • Simple • Fast</div>
           </div>
         </div>
         <button id="toBuilderTop" class="btn primary">Start Build</button>
-=======
-            <div>Dream PC Builder</div>
-          </div>
-        </div>
->>>>>>> 5b8c9aa (updated code)
       </header>
 
       <!-- INTRO PAGE -->
       <section id="intro" class="card">
         <div class="hero-center">
-<<<<<<< HEAD
           <h1 class="title">Design your dream PC</h1>
           <p class="subtitle">
             Learn the essential parts and then pick components using a sleek,
@@ -36,22 +29,7 @@
           </p>
 
           <div class="actions">
-=======
-          <h2 class="title">Design your dream PC</h2>
-          <p class="subtitle">
-            Pick components to create a clean simple fast PCPartPicker template
-          </p>
 
-          <div
-            class="actions"
-            style="
-              display: flex;
-              justify-content: center;
-              gap: 16px;
-              margin-top: 24px;
-            "
-          >
->>>>>>> 5b8c9aa (updated code)
             <button id="startBtn" class="btn primary">
               Start Building Your PC
             </button>
@@ -248,21 +226,16 @@
           </div>
         </div>
 
-<<<<<<< HEAD
         <div class="showcase-actions">
           <button id="startBuildBtn" class="btn primary large">
             Ready? Start Your Build!
           </button>
         </div>
-=======
-        <div class="showcase-actions"></div>
->>>>>>> 5b8c9aa (updated code)
       </section>
 
       <div style="height: 26px"></div>
 
       <!-- BUILDER PAGE -->
-<<<<<<< HEAD
       <section id="builder" class="card" aria-live="polite">
         <div class="toolbar">
           <h2>Build Sheet</h2>
@@ -338,62 +311,5 @@
       </section>
     </div>
     <script src="app.js"></script>
-=======
-      <div class="foot-actions">
-        <button
-          id="toTopBtn"
-          class="btn secondary"
-          style="display: block; margin: 24px auto"
-        >
-          Back to Top
-        </button>
-      </div>
-    </div>
-    <script src="app.js"></script>
-    <script>
-      document.addEventListener("DOMContentLoaded", function () {
-        // Connect all "start build" buttons to builder.html
-        var startBtn = document.getElementById("startBtn");
-        if (startBtn) {
-          startBtn.onclick = function () {
-            window.location.href = "builder.html";
-          };
-        }
-
-        var startBuildBtn = document.getElementById("startBuildBtn");
-        if (startBuildBtn) {
-          startBuildBtn.onclick = function () {
-            window.location.href = "builder.html";
-          };
-        }
-
-        var topBtn = document.getElementById("toBuilderTop");
-        if (topBtn) {
-          topBtn.onclick = function () {
-            window.location.href = "builder.html";
-          };
-        }
-
-        // Make "Learn About Parts" button scroll to the PC Components section
-        var learnBtn = document.getElementById("learnBtn");
-        if (learnBtn) {
-          learnBtn.onclick = function () {
-            var showcase = document.getElementById("parts-showcase");
-            if (showcase) {
-              showcase.scrollIntoView({ behavior: "smooth" });
-            }
-          };
-        }
-
-        // Make "Back to Top" button scroll to the top of the page
-        var toTopBtn = document.getElementById("toTopBtn");
-        if (toTopBtn) {
-          toTopBtn.onclick = function () {
-            window.scrollTo({ top: 0, behavior: "smooth" });
-          };
-        }
-      });
-    </script>
->>>>>>> 5b8c9aa (updated code)
   </body>
 </html>
