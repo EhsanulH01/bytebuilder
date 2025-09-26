@@ -138,6 +138,7 @@ header {
   flex-wrap: wrap;
   gap: 12px;
   margin-top: 22px;
+  justify-content: center;
 }
 .btn {
   appearance: none;
