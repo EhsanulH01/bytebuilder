@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ByteBuilder</title>
+    <link rel="stylesheet" href="src/style.css" />
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <div class="brand">
+          <div class="logo" aria-hidden="true"></div>
+          <div>
+            <div>ByteBuilder</div>
+          </div>
+        </div>
+        <button id="backToMainBtn" class="btn secondary">← Back to Main</button>
+      </header>
+
+      <!-- BUILDER PAGE -->
+      <section id="builder" class="card" aria-live="polite">
+        <div class="simple-builder">
+          <div class="builder-header">
+            <div class="builder-info">
+              <h2 class="builder-title">Choose Your PC Components</h2>
+              <p class="builder-subtitle">
+                Select each component to build your perfect PC
+              </p>
+            </div>
+            <div class="price-tracker">
+              <div class="total-price">
+                <span class="price-label">Total Cost:</span>
+                <span id="totalPrice" class="price-amount">$0</span>
+              </div>
+              <div class="component-count">
+                <span id="componentCount">0</span>/9 components selected
+              </div>
+            </div>
+          </div>
+
+          <div class="components-grid" id="componentsGrid">
+            <!-- Component cards will be injected by JavaScript -->
+          </div>
+        </div>
+
+        <!-- Part Details Modal -->
+        <div id="partModal" class="modal" style="display: none">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h3 id="modalTitle">Component Details</h3>
+              <button id="closeModal" class="close-btn">&times;</button>
+            </div>
+            <div class="modal-body">
+              <div id="modalContent">
+                <!-- Content will be populated by JavaScript -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+    <script src="src/builder.js"></script>
+  </body>
+</html>
