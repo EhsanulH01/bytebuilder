@@ -59,7 +59,8 @@ header {
   width: 40px;
   height: 40px;
   border-radius: 12px;
-  background: linear-gradient(135deg, var(--bg3), var(--bg4));
+  background: url("../assets/logo.svg") no-repeat center center;
+  background-size: cover;
   box-shadow: var(--shadow);
 }
 .pill {
@@ -526,6 +527,19 @@ select option:hover {
   justify-content: center;
 }
 
+/* Sticky Top Modal Styles */
+.modal.sticky-top {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.8);
+  z-index: 9999;
+  display: block;
+  overflow-y: auto;
+}
+
 .modal-content {
   background: var(--bg2);
   border: 1px solid var(--card-border);
@@ -535,6 +549,36 @@ select option:hover {
   max-height: 80vh;
   overflow-y: auto;
   box-shadow: var(--shadow);
+}
+
+/* Sticky Top Modal Content */
+.modal.sticky-top .modal-content {
+  background: var(--bg2);
+  border: none;
+  border-bottom: 2px solid var(--card-border);
+  border-radius: 0;
+  max-width: 100%;
+  width: 100%;
+  max-height: none;
+  min-height: 100vh;
+  margin: 0;
+  box-shadow: 0 4px 25px rgba(0, 0, 0, 0.5);
+  position: sticky;
+  top: 0;
+}
+
+.modal.sticky-top .modal-header {
+  background: var(--bg1);
+  border-bottom: 2px solid var(--bg3);
+  padding: 16px 20px;
+  position: sticky;
+  top: 0;
+  z-index: 10001;
+}
+
+.modal.sticky-top .modal-body {
+  padding: 20px;
+  min-height: calc(100vh - 80px);
 }
 
 .modal-header {
@@ -781,11 +825,11 @@ select option:hover {
     align-items: center;
     text-align: center;
   }
-  
+
   .builder-info {
     text-align: center;
   }
-  
+
   .price-tracker {
     width: 100%;
     max-width: 300px;
@@ -1023,8 +1067,12 @@ select option:hover {
 }
 
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 .search-info {
@@ -1225,7 +1273,8 @@ select option:hover {
 }
 
 /* Search Error Styles */
-.search-error-container, .no-results-container {
+.search-error-container,
+.no-results-container {
   text-align: center;
   padding: 40px 20px;
   background: rgba(239, 68, 68, 0.05);
@@ -1234,39 +1283,45 @@ select option:hover {
   margin: 20px 0;
 }
 
-.error-icon, .no-results-icon {
+.error-icon,
+.no-results-icon {
   font-size: 3rem;
   margin-bottom: 20px;
   display: block;
 }
 
-.search-error-container h4, .no-results-container h4 {
+.search-error-container h4,
+.no-results-container h4 {
   color: var(--error);
   margin: 0 0 16px 0;
   font-size: 1.2rem;
 }
 
-.search-error-container p, .no-results-container p {
+.search-error-container p,
+.no-results-container p {
   color: var(--muted);
   margin: 0 0 12px 0;
   line-height: 1.5;
 }
 
-.search-error-container ul, .no-results-container ul {
+.search-error-container ul,
+.no-results-container ul {
   text-align: left;
   max-width: 400px;
   margin: 16px auto;
   color: var(--muted);
 }
 
-.error-actions, .no-results-actions {
+.error-actions,
+.no-results-actions {
   display: flex;
   gap: 12px;
   justify-content: center;
   margin-top: 24px;
 }
 
-.retry-search-btn, .close-search-btn {
+.retry-search-btn,
+.close-search-btn {
   padding: 10px 20px;
   border: none;
   border-radius: 6px;

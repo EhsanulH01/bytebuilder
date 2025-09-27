@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300">
+  <!-- Dark purple background -->
+  <rect width="400" height="300" fill="#2a1f3d"/>
+  
+  <!-- Monitor with white/light gray frame -->
+  <g transform="translate(80, 60)">
+    <!-- Monitor outer frame -->
+    <rect x="0" y="0" width="240" height="160" rx="12" ry="12" fill="#e8e8e8" stroke="#d0d0d0" stroke-width="2"/>
+    
+    <!-- Screen with horizontal lines pattern -->
+    <rect x="8" y="8" width="224" height="144" rx="6" ry="6" fill="#f5f5f5"/>
+    
+    <!-- Horizontal line pattern on screen -->
+    <defs>
+      <pattern id="lines" patternUnits="userSpaceOnUse" width="224" height="4">
+        <rect width="224" height="2" fill="#f0f0f0"/>
+        <rect y="2" width="224" height="2" fill="#e8e8e8"/>
+      </pattern>
+    </defs>
+    <rect x="8" y="8" width="224" height="144" rx="6" ry="6" fill="url(#lines)"/>
+    
+    <!-- BB Text - large and bold -->
+    <text x="120" y="100" font-family="Arial Black, sans-serif" font-size="72" font-weight="900" text-anchor="middle" fill="#333">BB</text>
+    
+    <!-- Monitor stand -->
+    <rect x="110" y="155" width="20" height="15" fill="#c0c0c0"/>
+    <ellipse cx="120" cy="175" rx="25" ry="5" fill="#b0b0b0"/>
+    
+    <!-- Keyboard -->
+    <rect x="60" y="185" width="120" height="40" rx="4" ry="4" fill="#f0f0f0" stroke="#d0d0d0" stroke-width="1"/>
+    
+    <!-- Keyboard keys pattern -->
+    <g fill="#fff" stroke="#ddd" stroke-width="0.5">
+      <!-- Simplified key grid -->
+      <rect x="65" y="190" width="8" height="6" rx="1"/>
+      <rect x="75" y="190" width="8" height="6" rx="1"/>
+      <rect x="85" y="190" width="8" height="6" rx="1"/>
+      <rect x="95" y="190" width="8" height="6" rx="1"/>
+      <rect x="105" y="190" width="8" height="6" rx="1"/>
+      <rect x="115" y="190" width="8" height="6" rx="1"/>
+      <rect x="125" y="190" width="8" height="6" rx="1"/>
+      <rect x="135" y="190" width="8" height="6" rx="1"/>
+      <rect x="145" y="190" width="8" height="6" rx="1"/>
+      <rect x="155" y="190" width="8" height="6" rx="1"/>
+      <rect x="165" y="190" width="8" height="6" rx="1"/>
+      
+      <rect x="65" y="200" width="8" height="6" rx="1"/>
+      <rect x="75" y="200" width="8" height="6" rx="1"/>
+      <rect x="85" y="200" width="8" height="6" rx="1"/>
+      <rect x="95" y="200" width="8" height="6" rx="1"/>
+      <rect x="105" y="200" width="8" height="6" rx="1"/>
+      <rect x="115" y="200" width="8" height="6" rx="1"/>
+      <rect x="125" y="200" width="8" height="6" rx="1"/>
+      <rect x="135" y="200" width="8" height="6" rx="1"/>
+      <rect x="145" y="200" width="8" height="6" rx="1"/>
+      <rect x="155" y="200" width="8" height="6" rx="1"/>
+      
+      <rect x="65" y="210" width="8" height="6" rx="1"/>
+      <rect x="75" y="210" width="8" height="6" rx="1"/>
+      <rect x="85" y="210" width="8" height="6" rx="1"/>
+      <rect x="95" y="210" width="8" height="6" rx="1"/>
+      <rect x="105" y="210" width="8" height="6" rx="1"/>
+      <rect x="115" y="210" width="8" height="6" rx="1"/>
+      <rect x="125" y="210" width="8" height="6" rx="1"/>
+      <rect x="135" y="210" width="8" height="6" rx="1"/>
+      <rect x="145" y="210" width="8" height="6" rx="1"/>
+      <rect x="155" y="210" width="8" height="6" rx="1"/>
+      <rect x="165" y="210" width="8" height="6" rx="1"/>
+    </g>
+  </g>
+  
+  <!-- Wrench tool with metallic appearance -->
+  <g transform="translate(300, 120) rotate(15)">
+    <!-- Wrench body -->
+    <ellipse cx="40" cy="12" rx="45" ry="12" fill="#6b6b6b"/>
+    <ellipse cx="38" cy="10" rx="43" ry="10" fill="#7a7a7a"/>
+    
+    <!-- Wrench jaws -->
+    <rect x="75" y="2" width="15" height="8" rx="4" ry="4" fill="#5a5a5a"/>
+    <rect x="75" y="12" width="15" height="8" rx="4" ry="4" fill="#5a5a5a"/>
+    
+    <!-- Handle grip texture -->
+    <line x1="10" y1="6" x2="10" y2="16" stroke="#666" stroke-width="1"/>
+    <line x1="15" y1="6" x2="15" y2="16" stroke="#666" stroke-width="1"/>
+    <line x1="20" y1="6" x2="20" y2="16" stroke="#666" stroke-width="1"/>
+    <line x1="25" y1="6" x2="25" y2="16" stroke="#666" stroke-width="1"/>
+    <line x1="30" y1="6" x2="30" y2="16" stroke="#666" stroke-width="1"/>
+  </g>
+  
+  <!-- Dynamic action lines/sparks -->
+  <g stroke="#ffffff" stroke-width="2" fill="none" opacity="0.8">
+    <!-- Speed/action lines around monitor -->
+    <line x1="60" y1="100" x2="40" y2="80"/>
+    <line x1="65" y1="120" x2="45" y2="100"/>
+    <line x1="70" y1="140" x2="50" y2="120"/>
+    
+    <!-- Speed/action lines around wrench -->
+    <line x1="340" y1="110" x2="360" y2="90"/>
+    <line x1="345" y1="130" x2="365" y2="110"/>
+    <line x1="350" y1="150" x2="370" y2="130"/>
+    <line x1="355" y1="170" x2="375" y2="150"/>
+    
+    <!-- Additional motion lines -->
+    <line x1="320" y1="80" x2="340" y2="60"/>
+    <line x1="325" y1="90" x2="345" y2="70"/>
+    <line x1="330" y1="100" x2="350" y2="80"/>
+  </g>
+  
+  <!-- Subtle curved motion lines -->
+  <g stroke="#dddddd" stroke-width="1" fill="none" opacity="0.6">
+    <path d="M 50 120 Q 80 100 120 120"/>
+    <path d="M 280 120 Q 320 100 360 120"/>
+    <path d="M 55 140 Q 85 120 125 140"/>
+    <path d="M 275 140 Q 315 120 355 140"/>
+  </g>
+</svg>
