@@ -314,16 +314,20 @@ const selectComponent = (category, customComponent) => {
   const searchBtn = container.querySelector(".component-search-btn");
   const priceSpan = container.querySelector(".component-price");
 
-  // Hide search button, show selected item
-  if (searchBtn) {
-    searchBtn.textContent = `✓ ${customComponent.name}`;
-    searchBtn.classList.add('selected');
-  }
-
-  // Update price
-  if (priceSpan) {
-    priceSpan.textContent = `$${customComponent.price}`;
-    priceSpan.style.color = "var(--ok)";
+  // Update the component selection to show selected item with remove button
+  const componentSelection = container.querySelector('.component-selection');
+  if (componentSelection) {
+    componentSelection.innerHTML = `
+      <div class="selected-component">
+        <button class="component-search-btn selected" onclick="openComponentSearch('${category}')">
+          ✓ ${customComponent.name}
+        </button>
+        <button class="remove-component-btn" onclick="removeComponent('${category}')" title="Remove ${customComponent.name}">
+          🗑️
+        </button>
+      </div>
+      <span class="component-price" style="color: var(--ok);">$${customComponent.price}</span>
+    `;
   }
 
   // Update price tracker
@@ -331,6 +335,39 @@ const selectComponent = (category, customComponent) => {
 
   // Close modal
   closeModal();
+};
+
+// --- Remove component function ---
+const removeComponent = (category) => {
+  // Remove from state
+  delete state[category];
+
+  // Find the container and reset the UI
+  const containers = document.querySelectorAll(".component-card");
+  let container = null;
+
+  containers.forEach((c) => {
+    const header = c.querySelector("h3");
+    if (header && header.textContent === category) {
+      container = c;
+    }
+  });
+
+  if (!container) return;
+
+  // Reset the component selection back to search button
+  const componentSelection = container.querySelector('.component-selection');
+  if (componentSelection) {
+    componentSelection.innerHTML = `
+      <button class="component-search-btn" onclick="openComponentSearch('${category}')">
+        🔍 Search ${category}
+      </button>
+      <span class="component-price">$0</span>
+    `;
+  }
+
+  // Update price tracker
+  updatePriceTracker();
 };
 
 // --- Calculate total price ---
@@ -530,6 +567,7 @@ window.openComponentSearch = openComponentSearch;
 window.showWebResults = showWebResults;
 window.closeModal = closeModal;
 window.checkBuildCompatibility = checkBuildCompatibility;
+window.removeComponent = removeComponent;
 
 // --- Event listeners ---
 document.addEventListener("DOMContentLoaded", () => {

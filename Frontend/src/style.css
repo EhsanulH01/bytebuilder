@@ -664,6 +664,48 @@ header {
   text-align: left;
 }
 
+/* Remove component button styles */
+.selected-component {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+}
+
+.remove-component-btn {
+  padding: 12px;
+  border-radius: 8px;
+  background: linear-gradient(135deg, var(--bad), #dc2626);
+  color: white;
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 44px;
+  height: 52px;
+  flex-shrink: 0;
+}
+
+.remove-component-btn:hover {
+  background: linear-gradient(135deg, #dc2626, var(--bad));
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(239, 68, 68, 0.3);
+}
+
+.remove-component-btn:active {
+  transform: translateY(0);
+}
+
+/* Adjust the selected component search button when remove button is present */
+.selected-component .component-search-btn {
+  flex: 1;
+  margin-right: 0;
+}
+
 .selected-item-display {
   display: flex;
   align-items: center;
