@@ -248,22 +248,14 @@ const updatePriceTracker = () => {
 };
 
 // --- Select component from search ---
-const selectComponent = (category, itemId, customComponent = null) => {
-  let item;
-  
-  if (customComponent) {
-    // Use custom component from web search
-    item = customComponent;
-  } else {
-    // This should only be called with customComponent now
-    console.warn('selectComponent called without customComponent - this should not happen in web-only mode');
+const selectComponent = (category, itemId, customComponent) => {
+  if (!customComponent) {
+    console.warn('selectComponent called without customComponent');
     return;
   }
-  
-  if (!item) return;
 
   // Update state
-  state[category] = item;
+  state[category] = customComponent;
 
   // Find the container and update the UI
   const modal = $("#partModal");
@@ -285,13 +277,13 @@ const selectComponent = (category, itemId, customComponent = null) => {
 
   // Hide search button, show selected item
   if (searchBtn) {
-    searchBtn.textContent = `✓ ${item.name}`;
+    searchBtn.textContent = `✓ ${customComponent.name}`;
     searchBtn.classList.add('selected');
   }
 
   // Update price
   if (priceSpan) {
-    priceSpan.textContent = `$${item.price}`;
+    priceSpan.textContent = `$${customComponent.price}`;
     priceSpan.style.color = "var(--ok)";
   }
 
@@ -313,39 +305,6 @@ const calculateTotalPrice = () => {
   return total;
 };
 
-// --- Calculate total power consumption ---
-const calculateTotalWatts = () => {
-  let totalWatts = 0;
-  for (const category of ORDER) {
-    if (state[category]) {
-      totalWatts += state[category].watts || 0;
-    }
-  }
-  return totalWatts;
-};
-
-// --- Export build as text file ---
-const exportBuild = () => {
-  const buildList = ORDER.map((category) => {
-    const item = state[category];
-    return item
-      ? `${category}: ${item.name} - $${item.price}`
-      : `${category}: Not selected`;
-  }).join("\n");
-
-  const total = Object.values(state).reduce((sum, item) => sum + item.price, 0);
-  const buildText = `My PC Build:\n\n${buildList}\n\nTotal: $${total}`;
-
-  // Create a downloadable text file
-  const blob = new Blob([buildText], { type: "text/plain" });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = "my-pc-build.txt";
-  a.click();
-  URL.revokeObjectURL(url);
-};
-
 // Helper function to extract numeric price from price string
 const extractNumericPrice = (priceString) => {
   if (!priceString) return 0;
@@ -354,12 +313,9 @@ const extractNumericPrice = (priceString) => {
 };
 
 // Make functions global so they can be called from onclick
-window.selectComponent = selectComponent;
 window.selectWebComponent = selectWebComponent;
 window.openComponentSearch = openComponentSearch;
 window.showWebResults = showWebResults;
-window.showSearchError = showSearchError;
-window.closeModal = () => $("#partModal").style.display = "none";
 
 // --- Event listeners ---
 document.addEventListener("DOMContentLoaded", () => {
