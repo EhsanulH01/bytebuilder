@@ -1,0 +1,77 @@
+# PC Part Picker Project - Requirements File
+# This file contains all the Python dependencies needed to run the project
+
+# ===== Core Backend Dependencies =====
+# FastAPI for REST API server
+fastapi>=0.104.1
+uvicorn[standard]>=0.24.0  # ASGI server for FastAPI
+
+# Pydantic for data validation
+pydantic>=2.11.4
+
+# CORS middleware for API access
+# (included with fastapi)
+
+# ===== Web Search & HTTP Dependencies =====
+# HTTP client libraries
+aiohttp>=3.9.0
+httpx>=0.28.1
+requests>=2.32.0
+
+# HTML parsing for web scraping
+beautifulsoup4>=4.12.0
+
+# ===== AI & Language Model Dependencies =====
+# Gemini/Google AI integration (switched from OpenAI)
+langchain-google-genai>=2.0.5
+google-generativeai>=0.8.5
+
+# LangChain core libraries
+langchain>=0.3.25
+langchain-core>=0.3.75
+langgraph>=0.4.3
+
+# MCP (Model Context Protocol) support
+langchain-mcp-adapters>=0.0.11
+mcp[cli]>=1.8.0
+
+# ===== Database & Data Processing =====
+# SQLite (built-in with Python, no additional package needed)
+# Pandas for data manipulation (used in MCP dataflow server)
+pandas>=2.2.3
+
+# DuckDB for analytics (used in MCP dataflow server)
+duckdb>=1.2.2
+
+# ===== Configuration & Environment =====
+# Environment variable management
+python-dotenv>=1.1.0
+
+# ===== Development & Testing =====
+# HTTP testing
+requests>=2.32.0
+
+# ===== Optional MCP Server Dependencies =====
+# These are needed if using the full MCP functionality
+
+# Jupyter/IPython for notebook support (optional)
+ipykernel>=6.29.5
+
+# Additional MCP servers (optional)
+mcp-server-git>=2025.1.14
+
+# ===== Standard Library Dependencies =====
+# The following are part of Python's standard library and don't need to be installed:
+# - asyncio
+# - json
+# - sys
+# - os
+# - pathlib
+# - typing
+# - re
+# - urllib.parse
+# - random
+# - time
+# - subprocess
+# - dataclasses
+# - enum

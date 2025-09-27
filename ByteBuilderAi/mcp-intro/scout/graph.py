@@ -1,4 +1,4 @@
-from langchain_openai import ChatOpenAI
+from langchain_google_genai import ChatGoogleGenerativeAI
 from langgraph.graph import StateGraph, add_messages, START
 from langchain_core.messages import SystemMessage
 from pydantic import BaseModel
@@ -86,7 +86,13 @@ main.py should only be used to implement permanent changes to the data - to be c
 Assist the customer in all aspects of their data science workflow.
 """
 
-    llm = ChatOpenAI(name="Scout", model="gpt-4.1-mini-2025-04-14")
+    llm = ChatGoogleGenerativeAI(
+        model="gemini-1.5-flash",
+        temperature=0.1,
+        max_tokens=None,
+        timeout=None,
+        max_retries=2
+    )
     if tools:
         llm = llm.bind_tools(tools)
         #inject tools into system prompt

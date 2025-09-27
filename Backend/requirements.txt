@@ -1,0 +1,8 @@
+# Backend Requirements - Minimal set for running just the FastAPI backend
+fastapi>=0.104.1
+uvicorn[standard]>=0.24.0
+pydantic>=2.11.4
+aiohttp>=3.9.0
+beautifulsoup4>=4.12.0
+requests>=2.32.0
+python-dotenv>=1.1.0
