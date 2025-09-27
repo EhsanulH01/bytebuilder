@@ -281,7 +281,8 @@ const updatePriceTracker = () => {
       compatibilityBtn.title = "Check PC component compatibility";
     } else {
       compatibilityBtn.disabled = true;
-      compatibilityBtn.title = "Select at least 2 components to check compatibility";
+      compatibilityBtn.title =
+        "Select at least 2 components to check compatibility";
     }
   }
 };
@@ -289,7 +290,7 @@ const updatePriceTracker = () => {
 // --- Select component from search ---
 const selectComponent = (category, customComponent) => {
   if (!customComponent) {
-    console.warn('selectComponent called without customComponent');
+    console.warn("selectComponent called without customComponent");
     return;
   }
 
@@ -315,7 +316,7 @@ const selectComponent = (category, customComponent) => {
   const priceSpan = container.querySelector(".component-price");
 
   // Update the component selection to show selected item with remove button
-  const componentSelection = container.querySelector('.component-selection');
+  const componentSelection = container.querySelector(".component-selection");
   if (componentSelection) {
     componentSelection.innerHTML = `
       <div class="selected-component">
@@ -356,7 +357,7 @@ const removeComponent = (category) => {
   if (!container) return;
 
   // Reset the component selection back to search button
-  const componentSelection = container.querySelector('.component-selection');
+  const componentSelection = container.querySelector(".component-selection");
   if (componentSelection) {
     componentSelection.innerHTML = `
       <button class="component-search-btn" onclick="openComponentSearch('${category}')">
@@ -391,7 +392,7 @@ const extractNumericPrice = (priceString) => {
 // --- Compatibility checking functions ---
 const checkBuildCompatibility = async () => {
   const compatibilityBtn = document.getElementById("compatibilityCheckBtn");
-  
+
   // Check if we have any components selected
   if (Object.keys(state).length === 0) {
     showCompatibilityResults({
@@ -399,7 +400,7 @@ const checkBuildCompatibility = async () => {
       summary: "❓ Please select some components first to check compatibility.",
       compatibility_issues: [],
       power_analysis: null,
-      components_analyzed: 0
+      components_analyzed: 0,
     });
     return;
   }
@@ -407,7 +408,7 @@ const checkBuildCompatibility = async () => {
   // Show loading state
   compatibilityBtn.disabled = true;
   compatibilityBtn.innerHTML = "🔄 Checking...";
-  
+
   showCompatibilityLoading();
 
   try {
@@ -417,7 +418,7 @@ const checkBuildCompatibility = async () => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        components: state
+        components: state,
       }),
     });
 
@@ -427,7 +428,6 @@ const checkBuildCompatibility = async () => {
 
     const result = await response.json();
     showCompatibilityResults(result.compatibility_report);
-    
   } catch (error) {
     console.error("Compatibility check failed:", error);
     showCompatibilityResults({
@@ -435,7 +435,7 @@ const checkBuildCompatibility = async () => {
       summary: "❌ Unable to check compatibility. Please try again later.",
       compatibility_issues: [],
       power_analysis: null,
-      components_analyzed: 0
+      components_analyzed: 0,
     });
   } finally {
     // Reset button state
@@ -446,77 +446,81 @@ const checkBuildCompatibility = async () => {
 
 const showCompatibilityLoading = () => {
   // Remove existing compatibility results
-  const existingResults = document.querySelector('.compatibility-results');
+  const existingResults = document.querySelector(".compatibility-results");
   if (existingResults) {
     existingResults.remove();
   }
 
   // Create loading display
-  const builderSection = document.querySelector('.simple-builder');
-  const loadingDiv = document.createElement('div');
-  loadingDiv.className = 'compatibility-results';
+  const builderSection = document.querySelector(".simple-builder");
+  const loadingDiv = document.createElement("div");
+  loadingDiv.className = "compatibility-results";
   loadingDiv.innerHTML = `
     <div class="compatibility-loading">
       <div class="compatibility-spinner"></div>
       <span>Analyzing component compatibility...</span>
     </div>
   `;
-  
+
   builderSection.appendChild(loadingDiv);
 };
 
 const showCompatibilityResults = (report) => {
   // Remove existing compatibility results and loading
-  const existingResults = document.querySelector('.compatibility-results');
+  const existingResults = document.querySelector(".compatibility-results");
   if (existingResults) {
     existingResults.remove();
   }
 
-  const builderSection = document.querySelector('.simple-builder');
-  const resultsDiv = document.createElement('div');
-  resultsDiv.className = 'compatibility-results';
-  
-  let statusClass = '';
-  let statusIcon = '';
-  
+  const builderSection = document.querySelector(".simple-builder");
+  const resultsDiv = document.createElement("div");
+  resultsDiv.className = "compatibility-results";
+
+  let statusClass = "";
+  let statusIcon = "";
+
   switch (report.build_status) {
-    case 'compatible':
-      statusClass = 'compatible';
-      statusIcon = '✅';
+    case "compatible":
+      statusClass = "compatible";
+      statusIcon = "✅";
       break;
-    case 'warning':
-      statusClass = 'warning';
-      statusIcon = '⚠️';
+    case "warning":
+      statusClass = "warning";
+      statusIcon = "⚠️";
       break;
-    case 'incompatible':
-      statusClass = 'incompatible';
-      statusIcon = '❌';
+    case "incompatible":
+      statusClass = "incompatible";
+      statusIcon = "❌";
       break;
-    case 'no_components':
-      statusClass = 'warning';
-      statusIcon = '❓';
+    case "no_components":
+      statusClass = "warning";
+      statusIcon = "❓";
       break;
     default:
-      statusClass = 'warning';
-      statusIcon = '❓';
+      statusClass = "warning";
+      statusIcon = "❓";
   }
 
-  let issuesHtml = '';
+  let issuesHtml = "";
   if (report.compatibility_issues && report.compatibility_issues.length > 0) {
     issuesHtml = `
       <div class="compatibility-issues">
         <h4>Issues Found:</h4>
-        ${report.compatibility_issues.map(issue => `
+        ${report.compatibility_issues
+          .map(
+            (issue) => `
           <div class="compatibility-issue ${issue.severity}">
             <div class="issue-title">${issue.issue}</div>
             <div class="issue-suggestion">${issue.suggestion}</div>
           </div>
-        `).join('')}
+        `
+          )
+          .join("")}
       </div>
     `;
   }
 
-  let powerAnalysisHtml = '';
+  let powerAnalysisHtml = "";
   if (report.power_analysis) {
     powerAnalysisHtml = `
       <div class="power-analysis">
@@ -546,11 +550,11 @@ const showCompatibilityResults = (report) => {
     ${issuesHtml}
     ${powerAnalysisHtml}
   `;
-  
+
   builderSection.appendChild(resultsDiv);
-  
+
   // Scroll to results
-  resultsDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  resultsDiv.scrollIntoView({ behavior: "smooth", block: "nearest" });
 };
 
 // Centralized modal close function
