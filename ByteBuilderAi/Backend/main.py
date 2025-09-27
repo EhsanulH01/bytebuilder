@@ -294,8 +294,6 @@ async def root():
         }
     }
 
-
-
 @app.post("/api/mcp-search")
 async def mcp_search_parts(request: SearchRequest):
     """Search for PC parts using web search"""
@@ -329,13 +327,13 @@ async def mcp_search_parts(request: SearchRequest):
 
 @app.post("/api/compatibility-check")
 async def check_pc_compatibility(request: CompatibilityRequest):
-    """Check compatibility of selected PC components"""
+    """Check compatibility of selected PC components using AI analysis"""
     try:
-        # Import the compatibility checker
-        from pc_compatibility_engine import DynamicPCCompatibilityChecker
+        # Import the AI compatibility analyzer
+        from ai_compatibility import ai_analyzer
         
-        checker = DynamicPCCompatibilityChecker()
-        compatibility_report = await checker.check_build_compatibility(request.components)
+        # Use AI-powered compatibility analysis
+        compatibility_report = await ai_analyzer.analyze_compatibility(request.components)
         
         return {
             "status": "success",
@@ -354,6 +352,94 @@ async def check_pc_compatibility(request: CompatibilityRequest):
                 "power_analysis": {"recommended_psu_wattage": 750, "explanation": "Unable to analyze - using safe default"},
                 "components_analyzed": 0,
                 "summary": "❓ Unable to check compatibility due to an error"
+            }
+        }
+
+@app.post("/api/ai-search")
+async def ai_enhanced_search(request: SearchRequest):
+    """AI-enhanced PC component search with intelligent recommendations"""
+    try:
+        from ai_compatibility import ai_analyzer
+        
+        # Get basic search results first
+        from simple_web_search import simple_search_pc_parts
+        search_results = await simple_search_pc_parts(request.query, request.max_results or 10)
+        
+        # If AI is available, enhance the results with recommendations
+        if ai_analyzer.model:
+            try:
+                # Create AI prompt for component recommendations
+                prompt = f"""
+You are a PC building expert. Analyze this search query and provide intelligent recommendations.
+
+Search Query: {request.query}
+Component Category: {request.query.split()[0] if request.query else 'Unknown'}
+
+Provide recommendations in JSON format:
+{{
+    "search_insights": {{
+        "component_type": "CPU|GPU|RAM|Storage|Motherboard|Case|PSU|Cooler|Accessories",
+        "key_factors": ["Performance", "Price-to-performance", "Compatibility"],
+        "recommended_specs": {{
+            "budget_range": "$200-400",
+            "performance_tier": "Mid-range",
+            "key_features": ["Feature 1", "Feature 2"]
+        }},
+        "compatibility_tips": [
+            "Ensure socket compatibility with motherboard",
+            "Check power requirements"
+        ]
+    }}
+}}
+
+Only return valid JSON, no additional text.
+"""
+                
+                ai_response = ai_analyzer.model.generate_content(prompt)
+                
+                # Try to parse AI insights
+                try:
+                    json_start = ai_response.text.find('{')
+                    json_end = ai_response.text.rfind('}') + 1
+                    if json_start >= 0 and json_end > json_start:
+                        ai_insights = json.loads(ai_response.text[json_start:json_end])
+                    else:
+                        ai_insights = {"search_insights": {"component_type": "Unknown"}}
+                except:
+                    ai_insights = {"search_insights": {"component_type": "Unknown"}}
+                
+                return {
+                    "query": request.query,
+                    "source": "AI-Enhanced Search",
+                    "results": search_results,
+                    "ai_insights": ai_insights,
+                    "timestamp": "2025-09-27"
+                }
+                
+            except Exception as ai_error:
+                print(f"AI enhancement failed: {ai_error}")
+                # Fall back to regular search
+                pass
+        
+        # Return regular search results if AI enhancement fails
+        return {
+            "query": request.query,
+            "source": "Web Search",
+            "results": search_results,
+            "timestamp": "2025-09-27"
+        }
+        
+    except Exception as e:
+        print(f"AI search error: {e}")
+        # Return enhanced fallback results
+        enhanced_results = get_enhanced_component_results(request.query)
+        return {
+            "query": request.query,
+            "source": "Enhanced Fallback",
+            "results": {
+                "query": request.query,
+                "results": enhanced_results,
+                "message": f"Found {len(enhanced_results)} enhanced {request.query} results"
             }
         }
 

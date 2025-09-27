@@ -21,7 +21,7 @@ try:
     
     # Initialize Gemini
     llm = ChatGoogleGenerativeAI(
-        model="gemini-1.5-flash",
+        model="gemini-pro",
         temperature=0.1,
         max_tokens=None,
         timeout=None,
