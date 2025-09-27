@@ -9,6 +9,7 @@ const ORDER = [
   "Case",
   "Power Supply",
   "Cooling System",
+  "Accessories",
 ];
 
 // --- DOM helpers ---
@@ -132,14 +133,17 @@ const updateSummary = () => {
   const wattBadgeEl = $("#wattBadge");
   if (wattBadgeEl) wattBadgeEl.textContent = `~ Wattage: ${totalWatts}W`;
   const perfScoreEl = $("#perfScore");
-  if (perfScoreEl) perfScoreEl.textContent = cpuGpuScore > 0 ? `${cpuGpuScore}/200` : "—";
+  if (perfScoreEl)
+    perfScoreEl.textContent = cpuGpuScore > 0 ? `${cpuGpuScore}/200` : "—";
 
   // Calculate PSU headroom
   const psu = state["Power Supply"];
   const psuHeadroomEl = $("#psuHeadroom");
   if (psuHeadroomEl) {
     if (psu && totalWatts > 0) {
-      const headroom = (((psu.watts - totalWatts) / psu.watts) * 100).toFixed(0);
+      const headroom = (((psu.watts - totalWatts) / psu.watts) * 100).toFixed(
+        0
+      );
       psuHeadroomEl.textContent = `${headroom}%`;
     } else {
       psuHeadroomEl.textContent = "—";
