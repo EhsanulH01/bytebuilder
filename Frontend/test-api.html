@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>API Test</title>
+  </head>
+  <body>
+    <h1>API Test</h1>
+    <button onclick="testAPI()">Test API</button>
+    <div id="result"></div>
+
+    <script>
+      async function testAPI() {
+        const resultDiv = document.getElementById("result");
+        resultDiv.innerHTML = "Testing API...";
+
+        try {
+          const response = await fetch("http://localhost:8000/api/mcp-search", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              query: "CPU computer component",
+              max_results: 5,
+            }),
+          });
+
+          if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
+
+          const data = await response.json();
+          resultDiv.innerHTML =
+            "<pre>" + JSON.stringify(data, null, 2) + "</pre>";
+        } catch (error) {
+          resultDiv.innerHTML = "Error: " + error.message;
+          console.error("API Error:", error);
+        }
+      }
+    </script>
+  </body>
+</html>

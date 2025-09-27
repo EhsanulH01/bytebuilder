@@ -8,14 +8,15 @@ def test_backend():
     print("🚀 Testing PC Part Picker Backend...")
     print("=" * 50)
     
-    # Test health endpoint
+    # Test root endpoint (health check)
     try:
-        response = requests.get("http://localhost:8000/health")
+        response = requests.get("http://localhost:8000/")
         if response.status_code == 200:
             health = response.json()
             print("✅ Health Check: PASSED")
-            print(f"   Status: {health['status']}")
-            print(f"   Compatibility Checker: {health['compatibility_checker']}")
+            print(f"   Message: {health['message']}")
+            print(f"   Version: {health['version']}")
+            print(f"   Available Endpoints: {health['endpoints']}")
         else:
             print("❌ Health Check: FAILED")
             return False
