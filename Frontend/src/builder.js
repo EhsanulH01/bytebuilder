@@ -1,7 +1,7 @@
 // --- ByteBuilder AI - Clean Web Search Only Version ---
 const ORDER = [
   "CPU",
-  "GPU", 
+  "GPU",
   "RAM",
   "Storage",
   "Motherboard",
@@ -18,38 +18,38 @@ const $ = (sel, ctx = document) => ctx.querySelector(sel);
 const state = {};
 
 // --- MCP Search Integration ---
-const MCP_API_BASE = 'http://localhost:8000';
+const MCP_API_BASE = "http://localhost:8000";
 
 class MCPSearchService {
   async searchParts(query, maxResults = 10, comparePrices = false) {
     try {
       const response = await fetch(`${MCP_API_BASE}/api/mcp-search`, {
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({
           query: query,
           max_results: maxResults,
-          compare_prices: comparePrices
-        })
+          compare_prices: comparePrices,
+        }),
       });
-      
+
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
-      
+
       return await response.json();
     } catch (error) {
-      console.warn('MCP search unavailable:', error.message);
-      return { 
-        query, 
-        source: 'Error',
-        results: { 
-          query, 
-          results: [], 
-          message: 'Search service unavailable' 
-        } 
+      console.warn("MCP search unavailable:", error.message);
+      return {
+        query,
+        source: "Error",
+        results: {
+          query,
+          results: [],
+          message: "Search service unavailable",
+        },
       };
     }
   }
@@ -80,7 +80,7 @@ const buildComponentsGrid = () => {
 
     grid.appendChild(container);
   });
-  
+
   // Initialize price tracker
   updatePriceTracker();
 };
@@ -89,10 +89,18 @@ const buildComponentsGrid = () => {
 const openComponentSearch = async (category) => {
   const modal = $("#partModal");
   const modalTitle = $("#modalTitle");
-  
+
+  // Scroll to top of page
+  window.scrollTo({ top: 0, behavior: "smooth" });
+
+  // Add sticky-top class and show modal
+  modal.classList.add("sticky-top");
   modalTitle.textContent = `Select ${category}`;
   modal.style.display = "flex";
-  
+
+  // Prevent body scroll when modal is open
+  document.body.style.overflow = "hidden";
+
   // Immediately start web search
   await showWebResults(category);
 };
@@ -100,7 +108,7 @@ const openComponentSearch = async (category) => {
 // --- Show web search results ---
 const showWebResults = async (category) => {
   const modalContent = $("#modalContent");
-  
+
   // Show loading
   modalContent.innerHTML = `
     <div class="loading-container">
@@ -111,19 +119,36 @@ const showWebResults = async (category) => {
 
   try {
     // Search for the category with MCP
-    const searchResults = await mcpSearch.searchParts(`${category} computer component`, 15, true);
-    
-    let webResultsHtml = '';
-    
-    if (searchResults.results && searchResults.results.results && searchResults.results.results.length > 0) {
+    const searchResults = await mcpSearch.searchParts(
+      `${category} computer component`,
+      15,
+      true
+    );
+
+    let webResultsHtml = "";
+
+    if (
+      searchResults.results &&
+      searchResults.results.results &&
+      searchResults.results.results.length > 0
+    ) {
       webResultsHtml = searchResults.results.results
-        .map((item, index) => `
-          <div class="web-component-option" onclick="selectWebComponent('${category}', ${JSON.stringify(item).replace(/"/g, '&quot;')})">
+        .map(
+          (item, index) => `
+          <div class="web-component-option" onclick="selectWebComponent('${category}', ${JSON.stringify(
+            item
+          ).replace(/"/g, "&quot;")})">
             <div class="web-component-info">
-              <h4>${item.title || 'Component'}</h4>
-              <div class="web-component-price">${item.price || 'Price not available'}</div>
-              <div class="web-component-rating">⭐ ${item.rating || 'No rating'}</div>
-              <div class="web-component-snippet">${(item.snippet || '').substring(0, 120)}...</div>
+              <h4>${item.title || "Component"}</h4>
+              <div class="web-component-price">${
+                item.price || "Price not available"
+              }</div>
+              <div class="web-component-rating">⭐ ${
+                item.rating || "No rating"
+              }</div>
+              <div class="web-component-snippet">${(
+                item.snippet || ""
+              ).substring(0, 120)}...</div>
               <div class="web-component-source">
                 <a href="${item.url}" target="_blank">🔗 View Product</a>
                 <span class="source-label">Live Web Data</span>
@@ -131,14 +156,17 @@ const showWebResults = async (category) => {
             </div>
             <button class="select-web-component-btn">View Details</button>
           </div>
-        `)
+        `
+        )
         .join("");
-        
+
       modalContent.innerHTML = `
         <div class="search-header">
           <div class="search-info">
             <h4>🌐 Live Search Results</h4>
-            <p>Found ${searchResults.results?.results?.length || 0} current ${category} options with live pricing</p>
+            <p>Found ${
+              searchResults.results?.results?.length || 0
+            } current ${category} options with live pricing</p>
           </div>
           <button class="refresh-search-btn" onclick="showWebResults('${category}')">
             🔄 Refresh Search
@@ -169,9 +197,8 @@ const showWebResults = async (category) => {
         </div>
       `;
     }
-
   } catch (error) {
-    console.error('Web search failed:', error);
+    console.error("Web search failed:", error);
     // Show clean error message
     await showSearchError(category);
   }
@@ -180,7 +207,7 @@ const showWebResults = async (category) => {
 // --- Show error when web search fails ---
 const showSearchError = async (category) => {
   const modalContent = $("#modalContent");
-  
+
   modalContent.innerHTML = `
     <div class="search-error-container">
       <div class="error-icon">⚠️</div>
@@ -204,7 +231,7 @@ const showSearchError = async (category) => {
 // --- Select web component ---
 const selectWebComponent = (category, webComponent) => {
   if (!webComponent) return;
-  
+
   // Convert web search result to component format
   const customComponent = {
     id: `web-${Date.now()}`,
@@ -213,9 +240,9 @@ const selectWebComponent = (category, webComponent) => {
     watts: Math.floor(Math.random() * 200) + 50, // Estimated watts
     url: webComponent.url,
     rating: webComponent.rating,
-    snippet: webComponent.snippet
+    snippet: webComponent.snippet,
   };
-  
+
   // Select this custom component
   selectComponent(category, customComponent.id, customComponent);
 };
@@ -224,24 +251,24 @@ const selectWebComponent = (category, webComponent) => {
 const updatePriceTracker = () => {
   const totalPrice = calculateTotalPrice();
   const componentCount = Object.keys(state).length;
-  
+
   const totalPriceElement = $("#totalPrice");
   const componentCountElement = $("#componentCount");
-  
+
   if (totalPriceElement) {
     totalPriceElement.textContent = `$${totalPrice.toLocaleString()}`;
-    
+
     // Add visual feedback for price ranges
-    totalPriceElement.className = 'price-amount';
+    totalPriceElement.className = "price-amount";
     if (totalPrice > 3000) {
-      totalPriceElement.classList.add('price-high');
+      totalPriceElement.classList.add("price-high");
     } else if (totalPrice > 1500) {
-      totalPriceElement.classList.add('price-medium');
+      totalPriceElement.classList.add("price-medium");
     } else if (totalPrice > 0) {
-      totalPriceElement.classList.add('price-low');
+      totalPriceElement.classList.add("price-low");
     }
   }
-  
+
   if (componentCountElement) {
     componentCountElement.textContent = componentCount;
   }
@@ -259,19 +286,19 @@ const selectComponent = (category, itemId, customComponent) => {
 
   // Find the container and update the UI
   const modal = $("#partModal");
-  const containers = document.querySelectorAll('.component-card');
+  const containers = document.querySelectorAll(".component-card");
   let container = null;
-  
+
   // Find the container that matches this category
-  containers.forEach(c => {
-    const header = c.querySelector('h3');
+  containers.forEach((c) => {
+    const header = c.querySelector("h3");
     if (header && header.textContent === category) {
       container = c;
     }
   });
-  
+
   if (!container) return;
-  
+
   const searchBtn = container.querySelector(".component-search-btn");
   const priceSpan = container.querySelector(".component-price");
 
@@ -292,6 +319,8 @@ const selectComponent = (category, itemId, customComponent) => {
 
   // Close modal
   modal.style.display = "none";
+  modal.classList.remove("sticky-top");
+  document.body.style.overflow = "auto";
 };
 
 // --- Calculate total price ---
@@ -309,40 +338,51 @@ const calculateTotalPrice = () => {
 const extractNumericPrice = (priceString) => {
   if (!priceString) return 0;
   const matches = priceString.match(/[\d,]+\.?\d*/g);
-  return matches ? parseFloat(matches[0].replace(/,/g, '')) : 0;
+  return matches ? parseFloat(matches[0].replace(/,/g, "")) : 0;
 };
 
 // Make functions global so they can be called from onclick
 window.selectWebComponent = selectWebComponent;
 window.openComponentSearch = openComponentSearch;
 window.showWebResults = showWebResults;
+window.closeModal = () => {
+  const modal = $("#partModal");
+  modal.style.display = "none";
+  modal.classList.remove("sticky-top");
+  document.body.style.overflow = "auto";
+};
 
 // --- Event listeners ---
 document.addEventListener("DOMContentLoaded", () => {
   buildComponentsGrid();
-  
+
   // Handle back to main button
-  const backToMainBtn = document.getElementById('backToMainBtn');
+  const backToMainBtn = document.getElementById("backToMainBtn");
   if (backToMainBtn) {
-    backToMainBtn.addEventListener('click', () => {
-      window.location.href = 'index.html';
+    backToMainBtn.addEventListener("click", () => {
+      window.location.href = "index.html";
     });
   }
-  
+
   // Handle modal close button (X button in top right)
-  const closeModalBtn = document.getElementById('closeModal');
+  const closeModalBtn = document.getElementById("closeModal");
   if (closeModalBtn) {
-    closeModalBtn.addEventListener('click', () => {
-      document.getElementById('partModal').style.display = 'none';
+    closeModalBtn.addEventListener("click", () => {
+      const modal = document.getElementById("partModal");
+      modal.style.display = "none";
+      modal.classList.remove("sticky-top");
+      document.body.style.overflow = "auto";
     });
   }
-  
+
   // Also handle clicking outside the modal to close it
-  const modal = document.getElementById('partModal');
+  const modal = document.getElementById("partModal");
   if (modal) {
-    modal.addEventListener('click', (e) => {
+    modal.addEventListener("click", (e) => {
       if (e.target === modal) {
-        modal.style.display = 'none';
+        modal.style.display = "none";
+        modal.classList.remove("sticky-top");
+        document.body.style.overflow = "auto";
       }
     });
   }
