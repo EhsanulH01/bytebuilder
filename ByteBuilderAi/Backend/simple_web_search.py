@@ -7,7 +7,6 @@ import re
 from bs4 import BeautifulSoup
 from typing import Dict
 import urllib.parse
-import json
 import random
 
 async def simple_search_pc_parts(query: str, num_results: int = 10) -> dict:
@@ -32,8 +31,7 @@ async def simple_search_pc_parts(query: str, num_results: int = 10) -> dict:
         }
         
         # Build Google search URL for shopping results
-        search_query = f"{query} computer component price"
-        encoded_query = urllib.parse.quote_plus(search_query)
+        encoded_query = urllib.parse.quote_plus(f"{query} computer component price")
         google_url = f"https://www.google.com/search?q={encoded_query}&tbm=shop"
         
         timeout = aiohttp.ClientTimeout(total=15)
@@ -56,7 +54,7 @@ async def simple_search_pc_parts(query: str, num_results: int = 10) -> dict:
                 # Look for shopping results
                 product_divs = soup.find_all(['div'], class_=re.compile(r'.*product.*|.*shop.*|.*result.*', re.I))[:num_results]
                 
-                for i, div in enumerate(product_divs[:num_results]):
+                for i, div in enumerate(product_divs):
                     try:
                         # Extract title
                         title_elem = div.find(['h3', 'h4', 'span'], class_=re.compile(r'.*title.*|.*name.*', re.I))
@@ -103,7 +101,7 @@ async def simple_search_pc_parts(query: str, num_results: int = 10) -> dict:
                             "rating": f"{random.randint(35, 50)/10:.1f}",
                         })
                 
-                # If no results found, add some fallback results
+                # If no results found, add fallback results
                 if not results:
                     for i in range(min(num_results, 5)):
                         results.append({
