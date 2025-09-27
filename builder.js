@@ -8,6 +8,7 @@ const ORDER = [
   "Case",
   "Power Supply",
   "Cooling System",
+  "Accessories",
 ];
 
 // --- DOM helpers ---
