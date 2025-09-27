@@ -272,11 +272,14 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Pydantic model for the only endpoint we actually use
+# Pydantic models
 class SearchRequest(BaseModel):
     query: str
     max_results: Optional[int] = 10
     compare_prices: Optional[bool] = False
+
+class CompatibilityRequest(BaseModel):
+    components: Dict[str, Dict]
 
 # API Endpoints
 
@@ -286,7 +289,8 @@ async def root():
         "message": "PC Part Picker API", 
         "version": "1.0.0",
         "endpoints": {
-            "mcp_search": "/api/mcp-search"
+            "mcp_search": "/api/mcp-search",
+            "compatibility_check": "/api/compatibility-check"
         }
     }
 
@@ -323,7 +327,35 @@ async def mcp_search_parts(request: SearchRequest):
             }
         }
 
-
+@app.post("/api/compatibility-check")
+async def check_pc_compatibility(request: CompatibilityRequest):
+    """Check compatibility of selected PC components"""
+    try:
+        # Import the compatibility checker
+        from pc_compatibility_engine import DynamicPCCompatibilityChecker
+        
+        checker = DynamicPCCompatibilityChecker()
+        compatibility_report = await checker.check_build_compatibility(request.components)
+        
+        return {
+            "status": "success",
+            "compatibility_report": compatibility_report,
+            "timestamp": "2025-09-27"
+        }
+            
+    except Exception as e:
+        print(f"Compatibility check error: {e}")
+        return {
+            "status": "error",
+            "message": f"Compatibility check failed: {str(e)}",
+            "compatibility_report": {
+                "build_status": "unknown",
+                "compatibility_issues": [],
+                "power_analysis": {"recommended_psu_wattage": 750, "explanation": "Unable to analyze - using safe default"},
+                "components_analyzed": 0,
+                "summary": "❓ Unable to check compatibility due to an error"
+            }
+        }
 
 # Run the server
 if __name__ == "__main__":

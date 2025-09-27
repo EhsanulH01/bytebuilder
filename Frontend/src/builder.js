@@ -254,6 +254,7 @@ const updatePriceTracker = () => {
 
   const totalPriceElement = $("#totalPrice");
   const componentCountElement = $("#componentCount");
+  const compatibilityBtn = $("#compatibilityCheckBtn");
 
   if (totalPriceElement) {
     totalPriceElement.textContent = `$${totalPrice.toLocaleString()}`;
@@ -271,6 +272,17 @@ const updatePriceTracker = () => {
 
   if (componentCountElement) {
     componentCountElement.textContent = componentCount;
+  }
+
+  // Enable/disable compatibility button based on components
+  if (compatibilityBtn) {
+    if (componentCount >= 2) {
+      compatibilityBtn.disabled = false;
+      compatibilityBtn.title = "Check PC component compatibility";
+    } else {
+      compatibilityBtn.disabled = true;
+      compatibilityBtn.title = "Select at least 2 components to check compatibility";
+    }
   }
 };
 
@@ -339,6 +351,171 @@ const extractNumericPrice = (priceString) => {
   return matches ? parseFloat(matches[0].replace(/,/g, "")) : 0;
 };
 
+// --- Compatibility checking functions ---
+const checkBuildCompatibility = async () => {
+  const compatibilityBtn = document.getElementById("compatibilityCheckBtn");
+  
+  // Check if we have any components selected
+  if (Object.keys(state).length === 0) {
+    showCompatibilityResults({
+      build_status: "no_components",
+      summary: "❓ Please select some components first to check compatibility.",
+      compatibility_issues: [],
+      power_analysis: null,
+      components_analyzed: 0
+    });
+    return;
+  }
+
+  // Show loading state
+  compatibilityBtn.disabled = true;
+  compatibilityBtn.innerHTML = "🔄 Checking...";
+  
+  showCompatibilityLoading();
+
+  try {
+    const response = await fetch(`${MCP_API_BASE}/api/compatibility-check`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        components: state
+      }),
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const result = await response.json();
+    showCompatibilityResults(result.compatibility_report);
+    
+  } catch (error) {
+    console.error("Compatibility check failed:", error);
+    showCompatibilityResults({
+      build_status: "error",
+      summary: "❌ Unable to check compatibility. Please try again later.",
+      compatibility_issues: [],
+      power_analysis: null,
+      components_analyzed: 0
+    });
+  } finally {
+    // Reset button state
+    compatibilityBtn.disabled = false;
+    compatibilityBtn.innerHTML = "🔧 Check Compatibility";
+  }
+};
+
+const showCompatibilityLoading = () => {
+  // Remove existing compatibility results
+  const existingResults = document.querySelector('.compatibility-results');
+  if (existingResults) {
+    existingResults.remove();
+  }
+
+  // Create loading display
+  const builderSection = document.querySelector('.simple-builder');
+  const loadingDiv = document.createElement('div');
+  loadingDiv.className = 'compatibility-results';
+  loadingDiv.innerHTML = `
+    <div class="compatibility-loading">
+      <div class="compatibility-spinner"></div>
+      <span>Analyzing component compatibility...</span>
+    </div>
+  `;
+  
+  builderSection.appendChild(loadingDiv);
+};
+
+const showCompatibilityResults = (report) => {
+  // Remove existing compatibility results and loading
+  const existingResults = document.querySelector('.compatibility-results');
+  if (existingResults) {
+    existingResults.remove();
+  }
+
+  const builderSection = document.querySelector('.simple-builder');
+  const resultsDiv = document.createElement('div');
+  resultsDiv.className = 'compatibility-results';
+  
+  let statusClass = '';
+  let statusIcon = '';
+  
+  switch (report.build_status) {
+    case 'compatible':
+      statusClass = 'compatible';
+      statusIcon = '✅';
+      break;
+    case 'warning':
+      statusClass = 'warning';
+      statusIcon = '⚠️';
+      break;
+    case 'incompatible':
+      statusClass = 'incompatible';
+      statusIcon = '❌';
+      break;
+    case 'no_components':
+      statusClass = 'warning';
+      statusIcon = '❓';
+      break;
+    default:
+      statusClass = 'warning';
+      statusIcon = '❓';
+  }
+
+  let issuesHtml = '';
+  if (report.compatibility_issues && report.compatibility_issues.length > 0) {
+    issuesHtml = `
+      <div class="compatibility-issues">
+        <h4>Issues Found:</h4>
+        ${report.compatibility_issues.map(issue => `
+          <div class="compatibility-issue ${issue.severity}">
+            <div class="issue-title">${issue.issue}</div>
+            <div class="issue-suggestion">${issue.suggestion}</div>
+          </div>
+        `).join('')}
+      </div>
+    `;
+  }
+
+  let powerAnalysisHtml = '';
+  if (report.power_analysis) {
+    powerAnalysisHtml = `
+      <div class="power-analysis">
+        <div class="power-analysis-title">⚡ Power Requirements</div>
+        <div>Recommended PSU: <strong>${report.power_analysis.recommended_psu_wattage}W</strong></div>
+        <div style="font-size: 0.9rem; margin-top: 4px; color: var(--muted);">
+          ${report.power_analysis.explanation}
+        </div>
+      </div>
+    `;
+  }
+
+  resultsDiv.innerHTML = `
+    <div class="compatibility-header">
+      <span class="compatibility-status ${statusClass}">
+        ${statusIcon} Compatibility Check
+      </span>
+      <small style="color: var(--muted);">
+        ${report.components_analyzed || 0} components analyzed
+      </small>
+    </div>
+    
+    <div class="compatibility-summary ${statusClass}">
+      ${report.summary}
+    </div>
+    
+    ${issuesHtml}
+    ${powerAnalysisHtml}
+  `;
+  
+  builderSection.appendChild(resultsDiv);
+  
+  // Scroll to results
+  resultsDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+};
+
 // Centralized modal close function
 const closeModal = () => {
   const modal = $("#partModal");
@@ -352,6 +529,7 @@ window.selectWebComponent = selectWebComponent;
 window.openComponentSearch = openComponentSearch;
 window.showWebResults = showWebResults;
 window.closeModal = closeModal;
+window.checkBuildCompatibility = checkBuildCompatibility;
 
 // --- Event listeners ---
 document.addEventListener("DOMContentLoaded", () => {
@@ -369,6 +547,12 @@ document.addEventListener("DOMContentLoaded", () => {
   const closeModalBtn = document.getElementById("closeModal");
   if (closeModalBtn) {
     closeModalBtn.addEventListener("click", closeModal);
+  }
+
+  // Handle compatibility check button
+  const compatibilityBtn = document.getElementById("compatibilityCheckBtn");
+  if (compatibilityBtn) {
+    compatibilityBtn.addEventListener("click", checkBuildCompatibility);
   }
 
   // Also handle clicking outside the modal to close it
