@@ -195,12 +195,6 @@ document.addEventListener("DOMContentLoaded", () => {
   if (backBtn) {
     backBtn.addEventListener("click", showIntro);
   }
-
-  const toTopBtn = $("#toTopBtn");
-  if (toTopBtn) {
-    toTopBtn.addEventListener("click", showIntro);
-  }
-
   // Smooth scroll to parts showcase
   const learnBtn = $("#learnBtn");
   if (learnBtn) {
