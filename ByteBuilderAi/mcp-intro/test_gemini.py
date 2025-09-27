@@ -2,12 +2,6 @@
 Simple test script to verify Gemini integration is working
 """
 import os
-import sys
-from pathlib import Path
-
-# Add the current directory to the Python path
-current_dir = Path(__file__).parent
-sys.path.append(str(current_dir))
 
 try:
     from langchain_google_genai import ChatGoogleGenerativeAI
@@ -23,7 +17,7 @@ try:
     if not api_key or api_key == "YOUR_GEMINI_API_KEY_HERE":
         print("❌ Error: GOOGLE_API_KEY not set properly in .env file")
         print("Please get an API key from: https://ai.google.dev/gemini-api/docs/api-key")
-        sys.exit(1)
+        exit(1)
     
     # Initialize Gemini
     llm = ChatGoogleGenerativeAI(
@@ -36,12 +30,12 @@ try:
     
     # Test a simple query
     print("✅ Gemini initialized successfully!")
-    print("🔥 Testing with a simple query...")
+    print("Testing with a simple query...")
     
     response = llm.invoke("Hello! Can you help me with PC building?")
-    print(f"✅ Gemini response: {response.content[:100]}...")
+    print(f"✅ Gemini response received: {response.content[:100]}...")
     
-    print("🎉 Gemini integration is working perfectly!")
+    print("🎉 Gemini integration is working!")
     
 except ImportError as e:
     print(f"❌ Import error: {e}")

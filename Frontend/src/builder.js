@@ -244,7 +244,7 @@ const selectWebComponent = (category, webComponent) => {
   };
 
   // Select this custom component
-  selectComponent(category, customComponent.id, customComponent);
+  selectComponent(category, customComponent);
 };
 
 // --- Update price tracker display ---
@@ -275,7 +275,7 @@ const updatePriceTracker = () => {
 };
 
 // --- Select component from search ---
-const selectComponent = (category, itemId, customComponent) => {
+const selectComponent = (category, customComponent) => {
   if (!customComponent) {
     console.warn('selectComponent called without customComponent');
     return;
@@ -318,9 +318,7 @@ const selectComponent = (category, itemId, customComponent) => {
   updatePriceTracker();
 
   // Close modal
-  modal.style.display = "none";
-  modal.classList.remove("sticky-top");
-  document.body.style.overflow = "auto";
+  closeModal();
 };
 
 // --- Calculate total price ---
@@ -341,16 +339,19 @@ const extractNumericPrice = (priceString) => {
   return matches ? parseFloat(matches[0].replace(/,/g, "")) : 0;
 };
 
-// Make functions global so they can be called from onclick
-window.selectWebComponent = selectWebComponent;
-window.openComponentSearch = openComponentSearch;
-window.showWebResults = showWebResults;
-window.closeModal = () => {
+// Centralized modal close function
+const closeModal = () => {
   const modal = $("#partModal");
   modal.style.display = "none";
   modal.classList.remove("sticky-top");
   document.body.style.overflow = "auto";
 };
+
+// Make functions global so they can be called from onclick
+window.selectWebComponent = selectWebComponent;
+window.openComponentSearch = openComponentSearch;
+window.showWebResults = showWebResults;
+window.closeModal = closeModal;
 
 // --- Event listeners ---
 document.addEventListener("DOMContentLoaded", () => {
@@ -367,12 +368,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // Handle modal close button (X button in top right)
   const closeModalBtn = document.getElementById("closeModal");
   if (closeModalBtn) {
-    closeModalBtn.addEventListener("click", () => {
-      const modal = document.getElementById("partModal");
-      modal.style.display = "none";
-      modal.classList.remove("sticky-top");
-      document.body.style.overflow = "auto";
-    });
+    closeModalBtn.addEventListener("click", closeModal);
   }
 
   // Also handle clicking outside the modal to close it
@@ -380,9 +376,7 @@ document.addEventListener("DOMContentLoaded", () => {
   if (modal) {
     modal.addEventListener("click", (e) => {
       if (e.target === modal) {
-        modal.style.display = "none";
-        modal.classList.remove("sticky-top");
-        document.body.style.overflow = "auto";
+        closeModal();
       }
     });
   }

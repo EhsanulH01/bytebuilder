@@ -93,8 +93,5 @@ async def main():
 
 if __name__ == "__main__":
     import asyncio
-    # only needed if running in an ipykernel
-    import nest_asyncio
-    nest_asyncio.apply()
-
+    
     asyncio.run(main())

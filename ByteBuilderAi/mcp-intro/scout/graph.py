@@ -6,7 +6,6 @@ from typing import List, Annotated
 from langgraph.prebuilt import ToolNode, tools_condition
 from langgraph.checkpoint.memory import MemorySaver
 from langchain.tools import BaseTool
-import os
 
 
 class AgentState(BaseModel):
@@ -58,32 +57,13 @@ Always strive to find the best deals by:
 5. Warning about unusually high or low prices that might indicate issues
 </price_optimization>
 
-<filesystem>
-You have access to a set of tools that allow you to interact with the user's local filesystem. 
-You are only able to access files within the working directory `projects`. 
-The absolute path to this directory is: {working_dir}
-If you try to access a file outside of this directory, you will receive an error.
-Always use absolute paths when specifying files.
-</filesystem>
 
-<data>
-You can use dataflow tools to analyze PC part data, pricing trends, and compatibility matrices.
-Store any PC building configurations, price comparisons, and compatibility checks in the data directory.
-</data> 
-You must always first load data into the session before you can do anything with it.
-</data>
-
-<code>
-The main.py file is the entry point for the project and will contain all the code to load, transform, and model the data. 
-You will primarily work on this file to complete the user's requests.
-main.py should only be used to implement permanent changes to the data - to be commited to git. 
-</code>
 
 <tools>
 {tools}
 </tools>
 
-Assist the customer in all aspects of their data science workflow.
+Help customers build their perfect PC with expert advice and real-time component information.
 """
 
     llm = ChatGoogleGenerativeAI(
@@ -95,12 +75,9 @@ Assist the customer in all aspects of their data science workflow.
     )
     if tools:
         llm = llm.bind_tools(tools)
-        #inject tools into system prompt
+        # Inject tools into system prompt
         tools_json = [tool.model_dump_json(include=["name", "description"]) for tool in tools]
-        system_prompt = system_prompt.format(
-            tools="\n".join(tools_json), 
-            working_dir=os.environ.get("MCP_FILESYSTEM_DIR")
-            )
+        system_prompt = system_prompt.format(tools="\n".join(tools_json))
 
     def assistant(state: AgentState) -> AgentState:
         response = llm.invoke([SystemMessage(content=system_prompt)] + state.messages)

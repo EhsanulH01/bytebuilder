@@ -11,13 +11,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  const startBuildBtn = $("#startBuildBtn");
-  if (startBuildBtn) {
-    startBuildBtn.addEventListener("click", () => {
-      window.location.href = "builder.html";
-    });
-  }
-
   // Smooth scroll to parts showcase
   const learnBtn = $("#learnBtn");
   if (learnBtn) {

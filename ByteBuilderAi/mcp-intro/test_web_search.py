@@ -4,11 +4,6 @@ This script demonstrates how to use the web search tools to find PC parts.
 """
 
 import asyncio
-import sys
-import os
-
-# Add the project root to path
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from scout.my_mcp.local_servers.web_search import web_session, search_pc_parts, scrape_product_details, search_and_compare_prices
 
